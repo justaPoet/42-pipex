@@ -6,7 +6,7 @@
 /*   By: febouana <febouana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 10:24:58 by apoet             #+#    #+#             */
-/*   Updated: 2024/06/27 17:41:52 by febouana         ###   ########.fr       */
+/*   Updated: 2024/06/27 19:50:54 by febouana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ int pipex(char *cmd_vanilla)
     }
     int id;
     id = fork();
+    //printf("ID ==%d\n", id);
     if (id == -1)
     {
         printf("Error fork\n");
@@ -129,7 +130,7 @@ int pipex(char *cmd_vanilla)
             return (0);
         }
         close(fd[0]);
-        printf("got from child process ==\n%s\n", line2); 
+        printf("got from child process ==%s\n", line2); 
         free(line2);
     }
     return (0);
@@ -139,21 +140,63 @@ int pipex(char *cmd_vanilla)
 //! ./pipex infile "ls -l" "wc -l" outfile
 //!        < infile ls -l | wc -l > outfile
 
+//? Permet de regrouper dans un tableau de tableau toutes 
+//? les cmds passees en arguments, plus qu'a defiler .
+char **compil_cmds(int argc, char** argv)
+{
+    char **all_cmds;
+    int current_argv;
+    int i;
+    all_cmds = malloc((argc - 3) * sizeof(char*));
+    current_argv = 2;    
+    i = 0;
+    while (current_argv < (argc - 1))
+    {
+        all_cmds[i] = malloc((ft_strlen(argv[current_argv])) * sizeof(char));
+        ft_strlcat(all_cmds[i], argv[current_argv], ft_strlen(argv[current_argv]));
+        i++;
+        current_argv++;
+    }
+    return (all_cmds);
+}
+
 int main(int argc, char **argv)
 {
-    // if (argc < 5) // PAS BON
-    //     exit(1);
+    if (argc < 4)
+        exit(1);
+    
     verif_files(argc, argv);
     
-    int x = 1;
+    char **all_cmds = compil_cmds(argc, argv);
 
-    pipex(argv[2]);
+    
+    //pipex(argv[2]);
+
     
     printf("FINI\n");
     return (0);
 }
 
-//* connaitre le nbr de cmd... (pour ca ==> rajouter verif)
-//* ...creer des pipe equivalent pour repondre slon le nbr
+//* comprendre et adapter pipex() pour bien faire le pont entre deux cmds
+//* l'adapter pour repondre a autant de cmd qu'on veut  
 
-//! BELEK (bonus) : cas avec here_doc ou le second arg n'est pas une cmd
+//! BELEK (bonus) ==> cas avec here_doc ou le second arg n'est pas une cmd
+
+
+
+
+//? gadget, pas tres util ?
+//int cmds_counter(int limit, char **args)
+// {
+//     int counter;
+//     int i;
+//     counter = 0;
+//     i = 1;
+//     while (i < limit)
+//     {
+//         if (ft_strncmp("file1", args[i], 5) != 0 || ft_strncmp("file2", args[i], 5) != 0 || ft_strncmp("here_doc", args[i], 8) != 0)
+//             counter++;
+//         i++;
+//     }
+//     return (counter)
+// }

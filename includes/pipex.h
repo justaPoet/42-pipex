@@ -6,7 +6,7 @@
 /*   By: febouana <febouana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 16:19:28 by febouana          #+#    #+#             */
-/*   Updated: 2024/06/27 17:25:07 by febouana         ###   ########.fr       */
+/*   Updated: 2024/06/27 19:24:40 by febouana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ char	**ft_split(char *str, char separator);
 
 // AUDD pipex_utils
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
+size_t	ft_strlcat(char *dest, const char *src, size_t dest_size);
 
 // AUDD main
 int		pipex(char *arg);
