@@ -6,11 +6,11 @@
 /*   By: febouana <febouana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 15:41:58 by febouana          #+#    #+#             */
-/*   Updated: 2023/12/29 02:23:43 by febouana         ###   ########.fr       */
+/*   Updated: 2024/06/27 17:15:19 by febouana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "../includes/pipex.h"
 
 size_t	ft_strlen(const char *str)
 {

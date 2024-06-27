@@ -6,11 +6,11 @@
 /*   By: febouana <febouana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:07:24 by febouana          #+#    #+#             */
-/*   Updated: 2023/12/19 16:23:35 by febouana         ###   ########.fr       */
+/*   Updated: 2024/06/27 16:27:01 by febouana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "../includes/pipex.h"
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {

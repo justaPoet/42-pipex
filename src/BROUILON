@@ -1,0 +1,66 @@
+
+//! TEST AVEC EXECVE()
+// int main(int argc, char **argv)
+// {
+//     if (argc < 5)
+//         exit(1);
+//     verif_files(argc, argv);
+    
+    
+//     pipex();
+    
+//     printf("FINI\n");
+//     return (0);
+// }
+
+// int pipex()
+// {
+//     int fd[2];
+//     if (pipe(fd) == -1)
+//     {
+//         printf("Error pipex\n");
+//         return(0) ;
+//     }
+//     int id;
+//     id = fork();
+//     printf("ID == %d\n", id);
+//     if (id == -1)
+//     {
+//         printf("Error fork\n");
+//         return(0) ;
+//     }
+//     if (id == 0) //? child process
+//     {
+//         close(fd[0]);
+//         if (dup2(fd[1], STDOUT_FILENO) == -1)
+//         {
+//             printf("Error dup2\n");
+//             return (0);
+//         }
+//         char *args[] = {"/usr/bin/ls", "-l", NULL};
+//         if (execve(args[0], args, NULL) == -1)
+//         {
+//             printf("Error execve\n");
+//             return (0);
+//         }
+//         close(fd[1]);
+//     }
+//     else //? parent process
+//     {
+//         wait(0); //! sert a rien ici mais juste pour tester
+//         close(fd[1]);
+//         char *line2 = init_fullline(fd[0]);
+//         //char *line2 = get_next_line(fd[0]);
+//         if (line2 == NULL)
+//         {
+//             printf("CAMARCHEPAS\n");
+//             return (0);
+//         }
+//         close(fd[0]);
+//         printf("got from child process ==\n%s\n", line2); 
+//         free(line2);
+//     }
+//     return (0);
+// }
+
+//! ===================================================================
