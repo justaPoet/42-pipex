@@ -6,7 +6,7 @@
 /*   By: apoet <apoet@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 10:24:58 by apoet             #+#    #+#             */
-/*   Updated: 2024/06/26 13:31:38 by apoet            ###   ########.fr       */
+/*   Updated: 2024/06/27 12:41:21 by apoet            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,25 +127,31 @@ void verif_files(int argc, char **argv)
 {
     int search_file1 = 0;
     int search_file2 = 0;   
-    int i = 0; 
+    int i = 1; 
     
-    while (i++ < argc)
+    while (i < argc)
     {
-        if (ft_strncmp("file1", argv[i], 4) == 0)
+        if (ft_strncmp("file1", argv[i], 5) == 0)
         {
-            if (search_file1 > 0)
+            if (search_file1 != 0)
                 break ;
             search_file1++;
         }
-        if (ft_strncmp("file2", argv[i], 4) == 0)
+        if (ft_strncmp("file2", argv[i], 5) == 0)
         {
-            if (search_file2 > 0)
+            if (search_file2 != 0)
                 break ;
             search_file2++;
         }
+        i++;
     }
-    if (search_file1 + search_file2 != 2)
+    if (search_file1 + search_file2 == 2)
+        return ;
+    else
+    {
+        printf("No valid arguments\n");
         exit(1);
+    }
 }
 
 
@@ -153,20 +159,88 @@ void verif_files(int argc, char **argv)
 //!        < infile ls -l | wc -l > outfile
 
 //! TEST AVEC EXECVE()
+// int main(int argc, char **argv)
+// {
+//     if (argc < 5)
+//         exit(1);
+//     verif_files(argc, argv);
+    
+    
+//     pipex();
+    
+//     printf("FINI\n");
+//     return (0);
+// }
+
+// int pipex()
+// {
+//     int fd[2];
+//     if (pipe(fd) == -1)
+//     {
+//         printf("Error pipex\n");
+//         return(0) ;
+//     }
+//     int id;
+//     id = fork();
+//     printf("ID == %d\n", id);
+//     if (id == -1)
+//     {
+//         printf("Error fork\n");
+//         return(0) ;
+//     }
+//     if (id == 0) //? child process
+//     {
+//         close(fd[0]);
+//         if (dup2(fd[1], STDOUT_FILENO) == -1)
+//         {
+//             printf("Error dup2\n");
+//             return (0);
+//         }
+//         char *args[] = {"/usr/bin/ls", "-l", NULL};
+//         if (execve(args[0], args, NULL) == -1)
+//         {
+//             printf("Error execve\n");
+//             return (0);
+//         }
+//         close(fd[1]);
+//     }
+//     else //? parent process
+//     {
+//         wait(0); //! sert a rien ici mais juste pour tester
+//         close(fd[1]);
+//         char *line2 = init_fullline(fd[0]);
+//         //char *line2 = get_next_line(fd[0]);
+//         if (line2 == NULL)
+//         {
+//             printf("CAMARCHEPAS\n");
+//             return (0);
+//         }
+//         close(fd[0]);
+//         printf("got from child process ==\n%s\n", line2); 
+//         free(line2);
+//     }
+//     return (0);
+// }
+
 int main(int argc, char **argv)
 {
-    if (argc < 5)
-        exit(1);
-    verif_files(argc, argv);
-        
-    //pipex();
+    // if (argc < 5)
+    //     exit(1);
+    // verif_files(argc, argv);
+    
+    
+    pipex(argv);
     
     printf("FINI\n");
     return (0);
 }
 
-int pipex()
+int pipex(char **argv)
 {
+    char *cmd = argv[2];
+    char **cmd_args = &argv[2];
+    char *envp[] = { NULL };
+    
     int fd[2];
     if (pipe(fd) == -1)
     {
@@ -189,8 +263,7 @@ int pipex()
             printf("Error dup2\n");
             return (0);
         }
-        char *args[] = {"/usr/bin/ls", "-l", NULL};
-        if (execve(args[0], args, NULL) == -1)
+        if (execve(cmd, cmd_args, envp) == -1)
         {
             printf("Error execve\n");
             return (0);
