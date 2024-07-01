@@ -6,7 +6,7 @@
 /*   By: febouana <febouana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 16:19:28 by febouana          #+#    #+#             */
-/*   Updated: 2024/07/01 17:59:59 by febouana         ###   ########.fr       */
+/*   Updated: 2024/07/01 19:19:31 by febouana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ typedef enum Bool
 
 // AUDD gnl
 size_t	ft_strlen(const char *str);
-static char	*set_line(char *line_buffer);
-static char	*read_fd(int fd, char *audd, char *buffer);
 char	*get_next_line(int fd);
 
 //AUDD gnl_utils

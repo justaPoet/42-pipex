@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: febouana <febouana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 10:24:58 by apoet             #+#    #+#             */
-/*   Updated: 2024/07/01 18:43:26 by febouana         ###   ########.fr       */
+/*   Updated: 2024/07/01 19:32:20 by febouana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,6 @@ char **parse_cmd(char *args)
     return (ft_split(args, ' '));
 }
 
-//! RESULTAT VOULU
-//! ./pipex infile "ls -l" "wc -l" outfile
-//!        < infile ls -l | wc -l > outfile
-
 //? Permet d'executer n'importe quelle cmd avec ses flags, 
 //? necessite au prealable une string contenant la cmd voulue.
 //! rajouter secu si cmd introuvable //access()
@@ -94,7 +90,10 @@ void exec_cmd(char *cmd_with_flags, char** envp)
 
     char *cmd = ft_strjoin("/usr/bin/", cmd_args[1]);
     if (access(cmd, X_OK) == -1)
+    {
         perror("WRONG WAY");
+        exit(1);
+    }
     char *args[] = {cmd, cmd_args[2], NULL};
     
     // i = -1;
@@ -172,10 +171,6 @@ int pipex(char *cmd_vanilla1, char *cmd_vanilla2, int file1, int file2, char** e
     return (0);
 }
 
-//! RESULTAT VOULU
-//! ./pipex infile "ls -l" "wc -l" outfile
-//!        < infile ls -l | wc -l > outfile
-
 //? Permet de regrouper dans un tableau de tableau toutes 
 //? les cmds passees en arguments, plus qu'a defiler .
 char **compil_cmds(int argc, char** argv)
@@ -196,6 +191,10 @@ char **compil_cmds(int argc, char** argv)
     return (all_cmds);
 }
 
+//! RESULTAT VOULU
+//! ./pipex infile "ls -l" "wc -l" outfile
+//!        < infile ls -l | wc -l > outfile
+
 int main(int argc, char **argv, char **envp)
 {
     if (argc < 4)
@@ -214,15 +213,11 @@ int main(int argc, char **argv, char **envp)
     printf("FINI\n");
     return (0);
 }
-
-//* comprendre et adapter pipex() pour bien faire le pont entre deux cmds
-//* l'adapter pour repondre a autant de cmd qu'on veut  
-
-//! BELEK (bonus) ==> cas avec here_doc ou le second arg n'est pas une cmd
-//* verifier si la cmd passee en argument est valide avec "access()"
-
-//! ATTENTION AUX DROITS DES FICHIERS ==> prevoir un cas d'erreur si pas les droits comme so_long
-//! ATTENTION COHERENCE DANS LES CLOSE()
+//* corriger version mandatory 
+//* prevoir un cas d'erreur si pas les droits sur file1/file2 comme so_long
+//* (bonus) revoir chaque cas ou argv[x] est utiliser et le modifier
+//* (bonus) l'adapter pour repondre a autant de cmd qu'on veut (rajouter boucle) 
+//* (bonus) cas avec here_doc ou le second arg n'est pas une cmd
 
 //? gadget, pas tres util ?
 //int cmds_counter(int limit, char **args)
