@@ -6,7 +6,7 @@
 /*   By: febouana <febouana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 16:19:28 by febouana          #+#    #+#             */
-/*   Updated: 2024/06/27 19:24:40 by febouana         ###   ########.fr       */
+/*   Updated: 2024/07/01 17:59:59 by febouana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,11 @@ int		ft_strncmp(const char *s1, const char *s2, size_t n);
 size_t	ft_strlcat(char *dest, const char *src, size_t dest_size);
 
 // AUDD main
-int		pipex(char *arg);
+int		pipex(char *cmd_vanilla1, char *cmd_vanilla2, int file1, int file2, char** envp);
 char	*init_fullline(int fds);
 void	verif_files(int argc, char **argv);
 
 char	**parse_cmd(char *args);
-void	exec_cmd(char *argv);
+void	exec_cmd(char *argv, char** envp);
 
 #endif

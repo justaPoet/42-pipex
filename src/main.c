@@ -6,7 +6,7 @@
 /*   By: febouana <febouana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 10:24:58 by apoet             #+#    #+#             */
-/*   Updated: 2024/06/27 19:50:54 by febouana         ###   ########.fr       */
+/*   Updated: 2024/07/01 18:43:26 by febouana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void verif_files(int argc, char **argv)
         return ;
     else
     {
-        printf("No valid arguments\n");
+        perror("No valid arguments\n");
         exit(1);
     }
 }
@@ -71,67 +71,103 @@ char **parse_cmd(char *args)
     return (ft_split(args, ' '));
 }
 
+//! RESULTAT VOULU
+//! ./pipex infile "ls -l" "wc -l" outfile
+//!        < infile ls -l | wc -l > outfile
+
 //? Permet d'executer n'importe quelle cmd avec ses flags, 
 //? necessite au prealable une string contenant la cmd voulue.
-//! rajouter secu si cmd introuvable
-void exec_cmd(char *cmd_flags)
+//! rajouter secu si cmd introuvable //access()
+//! rajouter boucle au cas ou plusieurs flags (possible ?)
+void exec_cmd(char *cmd_with_flags, char** envp)
 {
-    char **cmd_args = parse_cmd(cmd_flags);
+    char **cmd_args = parse_cmd(cmd_with_flags);
     if (!cmd_args) //secu split
     {
-        printf("Error ft_split\n");
+        perror("Error ft_split\n");
         exit(1);
     }
+
+    // int i = 0;
+    // while (cmd_args[i++] != NULL)
+    //     printf("cmd_args == %s\n", cmd_args[i]);
+
     char *cmd = ft_strjoin("/usr/bin/", cmd_args[1]);
+    if (access(cmd, X_OK) == -1)
+        perror("WRONG WAY");
     char *args[] = {cmd, cmd_args[2], NULL};
-    if (execve(cmd, args, NULL) == -1)
+    
+    // i = -1;
+    // while (args[i++] != NULL)
+    //     printf("args == %s\n", args[i]);
+    if (execve(cmd, args, envp) == -1)
     {
-        printf("Error execve\n");
+        perror("Error execve");
         exit(1);
     }    
     return ;
 }
 
-int pipex(char *cmd_vanilla)
-{    
-    int fd[2];
-    if (pipe(fd) == -1)
+int pipex(char *cmd_vanilla1, char *cmd_vanilla2, int file1, int file2, char** envp)
+{   
+    int end[2];
+    if (pipe(end) == -1)
     {
-        printf("Error pipex\n");
+        perror("Error pipex\n");
         return(0) ;
     }
     int id;
     id = fork();
-    //printf("ID ==%d\n", id);
+    printf("ID ==%d\n", id);
     if (id == -1)
     {
-        printf("Error fork\n");
+        perror("Error fork\n");
         return(0) ;
     }
     if (id == 0) //? Child process
     {
-        close(fd[0]);
-        if (dup2(fd[1], STDOUT_FILENO) == -1)
+        if (dup2(end[1], STDOUT_FILENO) == -1)
         {
-            printf("Error dup2\n");
+            perror("Error dup2 sortie\n");
             return (0);
         }
-        exec_cmd(cmd_vanilla);
-        close(fd[1]);
+        if (dup2(file1, STDIN_FILENO) == -1)
+        {
+            perror("Error dup2 entree\n");
+            return (0);
+        }
+        close(end[0]);
+        exec_cmd(cmd_vanilla1, envp);
     }
+    
     else //? parent process
     {
         wait(0); // sert a rien ici mais juste pour tester
-        close(fd[1]);
-        char *line2 = init_fullline(fd[0]);
-        if (line2 == NULL)
+        // int status;
+        // waitpid(id, &status, 0);
+
+        if (dup2(file2, STDOUT_FILENO) == -1)
         {
-            printf("CAMARCHEPAS\n");
+            perror("Error dup2 entree 2.1\n");
             return (0);
         }
-        close(fd[0]);
-        printf("got from child process ==%s\n", line2); 
-        free(line2);
+        if (dup2(end[0], STDIN_FILENO) == -1)
+        {
+            perror("Error dup2 sortie 2.2\n");
+            return (0);
+        }
+        
+        char *line = init_fullline(file2);
+        if (line == NULL)
+        {
+            perror("CAMARCHEPAS\n");
+            return (0);
+        }
+        close(end[1]);
+        exec_cmd(cmd_vanilla2, envp);
+        
+        printf("got from child process ==%s\n", line); 
+        free(line);
     }
     return (0);
 }
@@ -160,19 +196,21 @@ char **compil_cmds(int argc, char** argv)
     return (all_cmds);
 }
 
-int main(int argc, char **argv)
+int main(int argc, char **argv, char **envp)
 {
     if (argc < 4)
         exit(1);
     
     verif_files(argc, argv);
     
-    char **all_cmds = compil_cmds(argc, argv);
+    // char **all_cmds = compil_cmds(argc, argv); // a utiliser pour nvl fn pipex
+    int file1 = open(argv[1], O_RDONLY, 0777);
+    int file2 = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 
-    
-    //pipex(argv[2]);
+    pipex(argv[2], argv[3], file1, file2, envp);
+    close(file1);
+    close(file2);
 
-    
     printf("FINI\n");
     return (0);
 }
@@ -181,9 +219,10 @@ int main(int argc, char **argv)
 //* l'adapter pour repondre a autant de cmd qu'on veut  
 
 //! BELEK (bonus) ==> cas avec here_doc ou le second arg n'est pas une cmd
+//* verifier si la cmd passee en argument est valide avec "access()"
 
-
-
+//! ATTENTION AUX DROITS DES FICHIERS ==> prevoir un cas d'erreur si pas les droits comme so_long
+//! ATTENTION COHERENCE DANS LES CLOSE()
 
 //? gadget, pas tres util ?
 //int cmds_counter(int limit, char **args)
