@@ -3,86 +3,89 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: febouana <febouana@student.42.fr>          +#+  +:+       +#+        */
+/*   By: apoet <apoet@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 21:15:23 by febouana          #+#    #+#             */
-/*   Updated: 2024/06/27 17:04:13 by febouana         ###   ########.fr       */
+/*   Updated: 2024/07/05 19:33:10 by apoet            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-int	count_words(char *str, char separator)
+int	count_words(char const *s, char c)
 {
 	int		count;
-	t_Bool	inside_word;
+	int		i;
 
+	i = 0;
 	count = 0;
-	while (*str)
+	while (s[i])
 	{
-		inside_word = false;
-		while (*str == separator && *str)
-			++str;
-		while (*str != separator && *str)
-		{
-			if (!inside_word)
-			{
-				++count;
-				inside_word = true;
-			}
-			++str;
-		}
+		while (s[i] == c)
+			i++;
+		if (s[i] != c && s[i])
+			count++;
+		while (s[i] != c && s[i])
+			i++;
 	}
 	return (count);
 }
 
-char	*get_next_word(char *str, char separator)
+void	ft_free_tab(char **tab)
 {
-	static int	cursor = 0;
-	char		*next_str;
-	int			len;
-	int			i;
+	char	**pos;
 
-	len = 0;
-	i = 0;
-	while (str[cursor] == separator)
-		++cursor;
-	while ((str[cursor + len] != separator) && str[cursor + len])
-		++len;
-	next_str = malloc((size_t)len * sizeof(char) + 1);
-	if (NULL == next_str)
-		return (NULL);
-	while ((str[cursor] != separator) && str[cursor])
-		next_str[i++] = str[cursor++];
-	next_str[i] = '\0';
-	return (next_str);
+	if (tab == NULL)
+		return ;
+	pos = tab;
+	while (*pos != NULL)
+		free(*(pos++));
+	free(tab);
 }
 
-char	**ft_split(char *str, char separator)
+char	*ft_str(char const *s, char c)
 {
-	int		words_number;
-	char	**vector_strings;
 	int		i;
+	char	*ptr;
 
 	i = 0;
-	words_number = count_words(str, separator);
-	if (!words_number)
-		exit(1);
-	vector_strings = malloc(sizeof(char *) * (size_t)(words_number + 2));
-	if (NULL == vector_strings)
-		return (NULL);
-	while (words_number-- >= 0)
+	while (s[i] && s[i] != c)
+		i++;
+	ptr = malloc(sizeof(char) * (i + 1));
+	if (!(ptr))
 	{
-		if (0 == i)
-		{
-			vector_strings[i] = malloc(sizeof(char));
-			if (NULL == vector_strings[i])
-				return (NULL);
-			vector_strings[i++][0] = '\0';
-			continue ;
-		}
-		vector_strings[i++] = get_next_word(str, separator);
+		free(ptr);
+		return (NULL);
 	}
-	vector_strings[i] = NULL;
-	return (vector_strings);
+	ft_strlcpy(ptr, s, i + 1);
+	return (ptr);
+}
+
+char	**ft_split(char const *s, char c)
+{
+	int		i;
+	int		strs_len;
+	char	**ptr;
+
+	if (!s)
+		return (0);
+	strs_len = count_words(s, c);
+	ptr = ft_calloc(sizeof(char *), (strs_len + 1));
+	if (!(ptr))
+		return (NULL);
+	i = -1;
+	while (++i < strs_len)
+	{
+		while (s[0] == c)
+			s++;
+		ptr[i] = ft_str(s, c);
+		if (!(ptr[i]))
+		{
+			ft_free_tab(ptr);
+			return (NULL);
+		}
+		s += ft_strlen(ptr[i]);
+	}
+	ptr[i] = 0;
+	return (ptr);
 }
