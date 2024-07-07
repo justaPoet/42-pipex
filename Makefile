@@ -6,11 +6,12 @@ RM = 			rm -f
 
 NAME = 			pipex
 
-SRCS =			srcs/pipex.c \
-				srcs/pipex_utils.c \
-				srcs/get_next_line.c \
-				srcs/get_next_line_utils.c \
-				srcs/ft_split.c \
+SRC =			src/pipex.c \
+				src/pipex_utils.c \
+				src/get_next_line.c \
+				src/get_next_line_utils.c \
+				src/ft_split.c \
+				src/gestion_error.c \
 
 
 BANNER = "\n\n\e[0;37m ██████╗ ██╗██████╗ ███████╗██╗  ██╗  \n\
@@ -24,8 +25,8 @@ BANNER = "\n\n\e[0;37m ██████╗ ██╗██████╗ █�
 all: 			$(NAME)
 
 $(NAME):
-	@$(CC) $(SRCS) $(CFLAGS) -o $(NAME)
-	@echo -e $(BANNER)
+	@$(CC) $(SRC) $(CFLAGS) -o $(NAME)
+	@echo $(BANNER)
 
 re: 		fclean all	
 	@echo "\e[0;37m[✅ restored]"

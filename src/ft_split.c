@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apoet <apoet@student.42.fr>                +#+  +:+       +#+        */
+/*   By: febouana <febouana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 21:15:23 by febouana          #+#    #+#             */
-/*   Updated: 2024/07/05 19:33:10 by apoet            ###   ########.fr       */
+/*   Updated: 2024/07/07 23:04:42 by febouana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	count_words(char const *s, char c)
 {
-	int		count;
-	int		i;
+	int	count;
+	int	i;
 
 	i = 0;
 	count = 0;
