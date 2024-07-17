@@ -6,7 +6,7 @@
 /*   By: apoet <apoet@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 10:24:58 by apoet             #+#    #+#             */
-/*   Updated: 2024/07/17 18:21:07 by apoet            ###   ########.fr       */
+/*   Updated: 2024/07/17 19:32:22 by apoet            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 //* TESTEUR == https://github.com/michmos/42_pipex_tester
 //* GRILLE CORRECTEUR == https://github.com/mharriso/school21-checklists/blob/master/ng_2_pipex.pdf
 //! REFAIRE TOUS LES HEADERS + NORMINETTE
+//! revoir les close (+ besoin de close infile/outfile systematiquement ??)  
 
 //? Permet de verifier si les files decriptors sont bien valides.
 void verif_fds(t_pipex data, int argc, char **argv)
@@ -135,7 +136,7 @@ int	main(int argc, char **argv, char **envp)
 //     int current_argv;
 //     int i;
 //     all_cmds = NULL;	
-// 	all_cmds = malloc((argc - 3) * sizeof(char*)); //! probleme si heredoc autre argc
+// 	all_cmds = malloc((argc - 3) * sizeof(char*)); //! probleme si here_doc
 // 	current_argv = 2;
 //     i = 0;
 //     while (current_argv < (argc - 1))

@@ -6,13 +6,13 @@
 /*   By: apoet <apoet@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 18:03:39 by apoet             #+#    #+#             */
-/*   Updated: 2024/07/17 18:04:24 by apoet            ###   ########.fr       */
+/*   Updated: 2024/07/17 19:37:57 by apoet            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/pipex_bonus.h"
 
-void print_heredoc(char *limiter, int *end)
+void print_heredoc(char *limiter, int *end, t_pipex data)
 {
 	char *line;
 	
@@ -23,6 +23,8 @@ void print_heredoc(char *limiter, int *end)
 		if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0)
 		{
 			free(line);
+			close(end[1]); //!
+			close(data.outfile); //!
 			exit(0);
 		}
 		ft_putstr_fd(line, end[1]);
@@ -41,7 +43,7 @@ void	heredoc(char **argv, t_pipex data)
 	if (id == -1)
 		gestion_error_close(22, data);
 	if (id == 0)
-		print_heredoc(argv[2], end);
+		print_heredoc(argv[2], end, data);
 	else
 	{
 		close(end[1]);
