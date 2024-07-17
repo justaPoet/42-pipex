@@ -3,22 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: febouana <febouana@student.42.fr>          +#+  +:+       +#+        */
+/*   By: apoet <apoet@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 16:19:28 by febouana          #+#    #+#             */
-/*   Updated: 2024/07/07 22:55:18 by febouana         ###   ########.fr       */
+/*   Updated: 2024/07/17 18:20:35 by apoet            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
-# include <stdio.h>
 # define BUFFER_SIZE 42
 # include <fcntl.h>
 # include <stdlib.h>
-# include <string.h>
 # include <sys/wait.h>
 # include <unistd.h>
+
+typedef enum Bool
+{
+	false,
+	true
+}			t_Bool;
 
 typedef struct Data
 {
@@ -27,13 +31,7 @@ typedef struct Data
 	char	**envp;
 	char	**cmd_split;
 	char	*path;
-}			t_Data;
-
-typedef enum Bool
-{
-	false,
-	true
-}			t_Bool;
+}			t_pipex;
 
 // AUDD gnl
 size_t		ft_strlen(const char *str);
@@ -58,19 +56,19 @@ size_t		ft_strlcat(char *dest, const char *src, size_t dest_size);
 size_t		ft_strlcpy(char *dest, const char *src, size_t dest_size);
 
 // AUDD main
-void		pipex(char *cmd_vanilla1, char *cmd_vanilla2, t_Data data);
+void		pipex(char *cmd_vanilla1, char *cmd_vanilla2, t_pipex data);
 char		*init_fullline(int fds);
 void		verif_files(int argc, char **argv);
 
 char		**parse_cmd(char *args);
-void		exec_cmd(char *argv, t_Data data);
+void		exec_cmd(char *argv, t_pipex data);
 
 void		ft_free_tabtab(char **tabtab);
 void		*ft_memcpy(void *dest, const void *src, size_t len);
 
 // AUDD gestion_error
 void    gestion_error(int type);
-void gestion_error_close(int type, t_Data data);
-void gestion_error_close_free(int type, t_Data data);
+void gestion_error_close(int type, t_pipex data);
+void gestion_error_close_free(int type, t_pipex data);
 
 #endif

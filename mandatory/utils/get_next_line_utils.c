@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: febouana <febouana@student.42.fr>          +#+  +:+       +#+        */
+/*   By: apoet <apoet@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/30 14:07:24 by febouana          #+#    #+#             */
-/*   Updated: 2024/06/27 16:27:01 by febouana         ###   ########.fr       */
+/*   Updated: 2024/07/13 17:42:44 by apoet            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
+#include "../include/pipex.h"
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {

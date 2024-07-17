@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: febouana <febouana@student.42.fr>          +#+  +:+       +#+        */
+/*   By: apoet <apoet@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 10:24:58 by apoet             #+#    #+#             */
-/*   Updated: 2024/07/07 23:06:42 by febouana         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:16:11 by apoet            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
+#include "include/pipex.h"
 
 //? Permet d'executer n'importe quelle cmd avec ses flags.
-void	exec_cmd(char *cmd_with_flags, t_Data data)
+void	exec_cmd(char *cmd_with_flags, t_pipex data)
 {
 	data.cmd_split = ft_split(cmd_with_flags, ' ');
 	if (!data.cmd_split)
@@ -28,7 +28,7 @@ void	exec_cmd(char *cmd_with_flags, t_Data data)
 	return ;
 }
 
-void	child_process(char *cmd_vanilla1, int *end, t_Data data)
+void	child_process(char *cmd_vanilla1, int *end, t_pipex data)
 {
 	close(end[0]);
 	if (dup2(end[1], STDOUT_FILENO) == -1)
@@ -38,7 +38,7 @@ void	child_process(char *cmd_vanilla1, int *end, t_Data data)
 	exec_cmd(cmd_vanilla1, data);
 }
 
-void	parent_process(char *cmd_vanilla2, int *end, t_Data data)
+void	parent_process(char *cmd_vanilla2, int *end, t_pipex data)
 {
 	wait(0);
 	close(end[1]);
@@ -49,7 +49,7 @@ void	parent_process(char *cmd_vanilla2, int *end, t_Data data)
 	exec_cmd(cmd_vanilla2, data);
 }
 
-void	pipex(char *cmd_vanilla1, char *cmd_vanilla2, t_Data data)
+void	pipex(char *cmd_vanilla1, char *cmd_vanilla2, t_pipex data)
 {
 	int	end[2];
 	int	id;
@@ -67,16 +67,16 @@ void	pipex(char *cmd_vanilla1, char *cmd_vanilla2, t_Data data)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_Data	data;
+	t_pipex	data;
 
 	data.envp = envp;
 	if (argc != 5)
 		gestion_error(0);
 	data.infile = open(argv[1], O_RDONLY | O_CREAT | O_TRUNC, 0777);
-	if (access(argv[1], R_OK | F_OK) == -1)
+	if (access(argv[1], R_OK | F_OK) == -1 || data.infile == -1) //! OK
 		gestion_error(1);
 	data.outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	if (access(argv[argc - 1], W_OK | F_OK) == -1)
+	if (access(argv[argc - 1], W_OK | F_OK) == -1 || data.outfile == -1) //! OK
 		gestion_error(1);
 	if (argv[2][0] == '\0' || argv[3][0] == '\0')
 		gestion_error_close(11, data);
@@ -194,7 +194,7 @@ int	main(int argc, char **argv, char **envp)
 // }
 
 //? Parent process avec testeur
-// void parent_process(char *cmd_vanilla2, int *end, t_Data data)
+// void parent_process(char *cmd_vanilla2, int *end, t_pipex data)
 // {
 //     wait(0);
 //     close(end[1]);

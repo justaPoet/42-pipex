@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: febouana <febouana@student.42.fr>          +#+  +:+       +#+        */
+/*   By: apoet <apoet@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/26 13:20:49 by apoet             #+#    #+#             */
-/*   Updated: 2024/07/07 23:08:35 by febouana         ###   ########.fr       */
+/*   Updated: 2024/07/13 17:40:26 by apoet            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
+#include "include/pipex.h"
 
 //? Permet de free entierement un tableau de tableau.
 void	ft_free_tabtab(char **tabtab)
