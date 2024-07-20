@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apoet <apoet@student.42.fr>                +#+  +:+       +#+        */
+/*   By: febouana <febouana@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 16:19:28 by febouana          #+#    #+#             */
-/*   Updated: 2024/07/17 19:12:43 by apoet            ###   ########.fr       */
+/*   Updated: 2024/07/20 15:33:40 by febouana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,25 @@ typedef struct Data
 	char	**envp;
 	char	**cmd_split;
 	char	*path;
+	char	*arg_outline;
 }			t_pipex;
 
 //+ pipex.c
-void	exec_cmd(char *cmd_with_flags, t_pipex data);
-void	child_process(char *cmd_vanilla1, int *end, t_pipex data);
-void	parent_process(char *cmd_vanilla2, int *end, t_pipex data);
-void	pipex(char *cmd_vanilla1, char *cmd_vanilla2, t_pipex data);
+void		exec_cmd(char *cmd_with_flags, t_pipex data);
+void		child_process(char *cmd_vanilla1, int *end, t_pipex data);
+void		parent_process(char *cmd_vanilla2, int *end, t_pipex data);
+void		pipex(char *cmd_vanilla1, char *cmd_vanilla2, t_pipex data);
 
 //+ pipex_utils.c
-void	ft_free_tabtab(char **tabtab);
-size_t	ft_strlcpy(char *dest, const char *src, size_t dest_size);
-void	*ft_memcpy(void *dest, const void *src, size_t len);
+void		ft_free_tabtab(char **tabtab);
+size_t		ft_strlcpy(char *dest, const char *src, size_t dest_size);
+void		*ft_memcpy(void *dest, const void *src, size_t len);
 
 //+ gestion_error.c
-void	gestion_error(int type);
-void	gestion_error_close(int type, t_pipex data);
-void	gestion_error_close_free(int type, t_pipex data);
+void		gestion_error(int type);
+void		gestion_error_close(int type, t_pipex data);
+void		gestion_error_close_free(int type, t_pipex data);
+void		error_outfile(t_pipex data, int type);
 
 //+ get_next_line.c
 size_t		ft_strlen(const char *str);
